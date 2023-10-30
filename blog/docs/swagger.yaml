@@ -1,0 +1,103 @@
+definitions:
+  model.Article:
+    properties:
+      author:
+        type: string
+      content:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+    type: object
+  model.ResponseError:
+    properties:
+      data:
+        description: data
+      message:
+        description: Error message
+        type: string
+      status:
+        description: Http status code
+        type: integer
+    type: object
+  model.SuccessResponseModel:
+    properties:
+      data:
+        description: data
+      message:
+        description: Error message
+        type: string
+      status:
+        description: Http status code
+        type: integer
+    type: object
+info:
+  contact: {}
+  title: Blog
+  version: "2.0"
+paths:
+  /article/{id}:
+    get:
+      description: Return article for given ID
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SuccessResponseModel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ResponseError'
+      summary: Return article for given ID
+      tags:
+      - External
+  /articles:
+    get:
+      description: Return list of articles
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SuccessResponseModel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ResponseError'
+      summary: Return list of articles
+      tags:
+      - External
+    post:
+      description: Create New Article
+      parameters:
+      - description: Article
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.Article'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.SuccessResponseModel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ResponseError'
+      summary: Create Article
+      tags:
+      - External
+swagger: "2.0"

@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  db_blog:
+    image: mysql:5.7
+    platform: linux/x86_64
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4
+    container_name: blog_db
+    networks:
+      - default
+    ports:
+      - '3314:3306'
+    expose:
+      - '3306' # Opens port 3306 on the container
+    env_file:
+      - docker-mysql.env
+    volumes:
+      - ./conf/my.cnf:/etc/mysql/my.cnf # Where our data will be persisted
+    healthcheck:
+      test: [ "CMD-SHELL", "mysql -h localhost -u $${MYSQL_USER} -p$${MYSQL_PASSWORD} -e 'SHOW DATABASES;'" ]
+      interval: 10s
+      timeout: 20s
+      retries: 10
+      start_period: 5s
